@@ -418,12 +418,13 @@ select.vfx_select option {
     overflow: hidden;
 }
 
+/* inside .vfx_fullStage, which already starts below the nav */
 .vfx_asciiCanvas {
     position: absolute;
-    top: var(--nav-h);
+    top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - var(--nav-h));
+    height: 100%;
     max-width: none;
     z-index: 1;
     display: block;

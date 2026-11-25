@@ -267,5 +267,7 @@ export default class Stage {
         this.dispRT.dispose();
         this.bgTexture?.dispose();
         this.renderer.dispose();
+        // hand the context back now: phones allow only a few at once
+        this.renderer.forceContextLoss();
     }
 }

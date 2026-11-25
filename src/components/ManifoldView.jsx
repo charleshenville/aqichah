@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import Stage from '../tools/manifolds/engine/Stage';
 import { DEFAULTS } from '../tools/manifolds/params';
@@ -26,6 +26,10 @@ function ManifoldView({
     config, floorRef = null, className = '', style,
 }) {
     const canvasRef = useRef(null);
+    // Bumped when the GPU drops the context and doesn't give it back (phones
+    // do, under memory pressure or after a while in the background): a fresh
+    // canvas, so a fresh context.
+    const [gen, setGen] = useState(0);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -80,11 +84,14 @@ function ManifoldView({
             anchor = (tall && config.anchorPortrait) || config.anchor;
             const dpr = window.devicePixelRatio || 1;
             phys = { w: Math.max(2, box.width * dpr), h: Math.max(2, box.height * dpr) };
-            const k = Math.min(1, Math.sqrt((config.pixelBudget || 1.5e6) / (phys.w * phys.h)));
+            const budget = (!finePointer() && config.pixelBudgetTouch) || config.pixelBudget || 1.5e6;
+            const k = Math.min(1, Math.sqrt(budget / (phys.w * phys.h)));
             stage.setSize(phys.w * k, phys.h * k);
         };
         resize();
-        const ro = new ResizeObserver(resize);
+        // resizing clears the canvas, so draw again at once (not only on the
+        // next frame, which may not come: reduced motion, or paused)
+        const ro = new ResizeObserver(() => { resize(); draw(); });
         ro.observe(canvas);
         // the floor moving (the bar growing with zoomed text) re-places it
         if (floorRef?.current) ro.observe(floorRef.current);
@@ -202,6 +209,7 @@ function ManifoldView({
         let t = 0;
         let prev = performance.now();
         const draw = () => {
+            if (stage.lost) return;
             stage.render(frame(t), t, { overlay: false, outW: phys.w / (config.lineScale || 1.5) });
             if (regionStale) {
                 // measured at rest: no turn, no wind-up
@@ -242,6 +250,20 @@ function ManifoldView({
             }
         };
         draw();
+
+        let lostTimer = 0;
+        const onLost = () => {
+            clearTimeout(lostTimer);
+            lostTimer = setTimeout(() => setGen((g) => g + 1), 1200);
+        };
+        const onRestored = () => {
+            clearTimeout(lostTimer);
+            regionStale = true;
+            draw();
+        };
+        canvas.addEventListener('webglcontextlost', onLost);
+        canvas.addEventListener('webglcontextrestored', onRestored);
+
         const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); });
         io.observe(canvas);
         document.addEventListener('visibilitychange', sync);
@@ -249,6 +271,9 @@ function ManifoldView({
 
         return () => {
             cancelAnimationFrame(raf);
+            clearTimeout(lostTimer);
+            canvas.removeEventListener('webglcontextlost', onLost);
+            canvas.removeEventListener('webglcontextrestored', onRestored);
             io.disconnect();
             ro.disconnect();
             document.removeEventListener('visibilitychange', sync);
@@ -256,9 +281,9 @@ function ManifoldView({
             document.documentElement.removeEventListener('pointerleave', onLeave);
             stage.dispose();
         };
-    }, [config, floorRef]);
+    }, [config, floorRef, gen]);
 
-    return <canvas ref={canvasRef} className={className} style={style} aria-hidden="true" />;
+    return <canvas key={gen} ref={canvasRef} className={className} style={style} aria-hidden="true" />;
 }
 
 export default ManifoldView;

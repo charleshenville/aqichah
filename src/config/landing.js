@@ -36,6 +36,7 @@ export const MANIFOLD = {
     boxPortrait: { left: 0, top: 0, width: 100, height: 100 },
     fps: 30,
     pixelBudget: 2.6e6, // render pixels at most (scaled to fit)
+    pixelBudgetTouch: 1.1e6, // the same on phones and tablets, whose GPUs drop big canvases
     lineScale: 1.5, // line widths: screen pixels per `edgeWidth` unit
     camera: { position: [0, 0, 5.2], target: [0, 0, 0], fov: 35 },
     params: {
@@ -135,7 +136,9 @@ export const MANIFOLD = {
     // foot stays hidden whatever the window's shape. To move it: raise `x`
     // to go right, raise `depth` to go down; `params.scale` sizes it.
     anchor: { x: 0.86, depth: 0.85 },
-    anchorPortrait: { x: 0.62, depth: 0.5 },
+    // phones: the bar is tall and the sheaf fans up and left, so its root sits
+    // just under the bar's edge, far right, and the strands cross the photo
+    anchorPortrait: { x: 0.9, depth: 0.08 },
     // on tall screens
     portrait: { scale: 0.34 },
     // While idle the swirl breathes: key: [from, to] added to the parameter,
