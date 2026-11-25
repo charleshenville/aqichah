@@ -10,7 +10,7 @@ export const SOCIAL_LINES = [
     [
         { id: 'instagram', label: 'instagram', url: 'https://www.instagram.com/aqichah' },
         { id: 'tiktok', label: 'tiktok', url: 'https://www.tiktok.com/@aqichah' },
-        { id: 'youtube', label: 'youtube', url: 'https://www.youtube.com/@aqichah' },
+        { id: 'youtube', label: 'youtube', url: 'https://www.youtube.com/channel/UCaWOQ1kcWKLOhTQg_ML0JcQ' },
     ],
     [
         { id: 'soundcloud', label: 'soundcloud', url: 'https://soundcloud.com/aqichah' },
