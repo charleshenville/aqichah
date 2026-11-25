@@ -1,0 +1,195 @@
+/* Software: the compositor first, then the browser tools as cards. */
+
+.lead {
+    font-size: clamp(1.25rem, 2vw, 2rem);
+    font-weight: 300;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    margin-bottom: var(--space-3);
+}
+
+/* Every picture sits in the same frame: a hairline drawn over whatever is
+   inside, so a video or a canvas can never cover it. */
+.frame {
+    position: relative;
+    overflow: hidden;
+    background: var(--violet-deep);
+}
+
+.frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--rule);
+    pointer-events: none;
+    z-index: 2;
+    transition: border-color 0.25s ease;
+}
+
+.frame > video,
+.frame > canvas,
+.frame > div {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+}
+
+/* ---- Compositor ---- */
+
+.feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.featureClip {
+    aspect-ratio: 4 / 3;
+}
+
+.featureText {
+    display: flex;
+    flex-direction: column;
+}
+
+.featureTitle {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 4.6vw, 4.75rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    color: var(--led);
+}
+
+.featureBlurb {
+    margin-top: var(--space-1);
+    max-width: 30ch;
+}
+
+.downloads {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-1);
+    margin-top: auto;
+    padding-top: var(--space-2);
+}
+
+.download {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    background: var(--violet-deep);
+    border: 1px solid var(--rule-strong);
+    color: var(--lilac);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.dlName {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+.dlIcon {
+    flex: 0 0 auto;
+    width: 1em;
+    height: 1em;
+}
+
+.dlState {
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+a.download:hover,
+a.download:focus-visible {
+    background: var(--led);
+    border-color: var(--led);
+    color: var(--violet);
+}
+
+.download:disabled {
+    cursor: not-allowed;
+    background: var(--violet-deep);
+    border-color: var(--rule);
+    color: var(--lilac-2);
+}
+
+/* ---- Tool cards ---- */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-3) var(--space-2);
+}
+
+.cardLink {
+    display: block;
+}
+
+.field {
+    aspect-ratio: 4 / 3;
+}
+
+/* full colour; a little richer on hover */
+.field > * {
+    transition: filter 0.3s ease;
+}
+
+.cardLink:hover .field::after,
+.cardLink:focus-visible .field::after {
+    border-color: var(--led);
+}
+
+.cardLink:hover .field > *,
+.cardLink:focus-visible .field > * {
+    filter: saturate(1.2);
+}
+
+.cardTitle {
+    margin-top: var(--space-1);
+    font-family: var(--display);
+    font-size: clamp(1.6rem, 2.4vw, 2.25rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--lilac);
+    transition: color 0.2s ease;
+}
+
+.cardBlurb {
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+    color: var(--lilac-2);
+}
+
+.cardLink:hover .cardTitle,
+.cardLink:focus-visible .cardTitle {
+    color: var(--led);
+}
+
+.cardLink:active .cardTitle {
+    color: var(--lilac);
+}
+
+@media (max-width: 900px) {
+    .feature {
+        grid-template-columns: 1fr;
+    }
+
+    .downloads {
+        margin-top: var(--space-2);
+        padding-top: 0;
+    }
+}

@@ -1,0 +1,252 @@
+/* Manifolds: the shared VFX panel (vfx.module.css) plus a letterboxed stage,
+   a transport under it and collapsible panel sections (as Quad Trees). */
+
+.stage {
+    position: absolute;
+    top: calc(var(--nav-h) + 8px);
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: 64px;
+    overflow: hidden;
+}
+
+.stagePanel {
+    right: calc(296px + 2 * var(--gutter));
+}
+
+.canvas {
+    position: absolute;
+    display: block;
+    touch-action: none;
+}
+
+/* A transparent backdrop shows as a checkerboard. */
+.checker {
+    background-color: #bbb;
+    background-image:
+        linear-gradient(45deg, #888 25%, transparent 25%),
+        linear-gradient(-45deg, #888 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #888 75%),
+        linear-gradient(-45deg, transparent 75%, #888 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+.editing {
+    cursor: crosshair;
+}
+
+.badge {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    padding: 3px 7px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    background: rgba(10, 12, 14, 0.72);
+    color: var(--accent);
+    pointer-events: none;
+}
+
+.transport {
+    position: fixed;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: 12px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px;
+    background: var(--menu-bg);
+    border: 1px solid var(--rule-strong, rgba(236, 235, 230, 0.18));
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    z-index: 28;
+    box-sizing: border-box;
+}
+
+.transportPanel {
+    right: calc(296px + 2 * var(--gutter));
+}
+
+.transport input[type='range'] {
+    flex: 1 1 auto;
+    min-width: 60px;
+}
+
+.time {
+    flex: 0 0 auto;
+    min-width: 92px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.8;
+}
+
+.stats {
+    flex: 0 0 auto;
+    opacity: 0.5;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.on {
+    color: var(--accent);
+}
+
+.sectionHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.sectionHead > :first-child {
+    margin-bottom: 0;
+}
+
+.sectionExtra {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.segLabelled {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    align-items: center;
+    gap: 0;
+}
+
+.segLabelled > div {
+    margin-bottom: 9px;
+}
+
+.segLabelled > span {
+    margin-bottom: 9px;
+}
+
+.buttons2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.buttons3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    font-size: 11px;
+}
+
+.strandHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 11px;
+    margin: 4px 0 8px;
+}
+
+.strandName {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+.xyz {
+    display: grid;
+    grid-template-columns: 14px 1fr 14px 1fr 14px 1fr;
+    gap: 4px;
+    align-items: center;
+    margin-bottom: 9px;
+    font-size: 10px;
+    opacity: 0.9;
+}
+
+.xyz input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.name {
+    font-size: 10px;
+    opacity: 0.6;
+    margin: -2px 0 9px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.warn {
+    color: #ff8a6b;
+    opacity: 0.9;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgba(17, 15, 22, 0.66);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog {
+    width: 340px;
+    max-width: calc(100vw - 32px);
+    background: var(--menu-bg);
+    color: var(--ink);
+    border: 1px solid var(--rule-strong, rgba(236, 235, 230, 0.18));
+    font-family: var(--sans);
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.dialogTitle {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--led);
+    text-transform: lowercase;
+    margin: 0 0 14px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+@media (max-width: 720px) {
+    .stage {
+        bottom: calc(46svh + 60px);
+    }
+
+    .transport {
+        bottom: calc(46svh + 10px);
+    }
+
+    .stagePanel,
+    .transportPanel {
+        right: var(--gutter);
+    }
+
+    .stats {
+        display: none;
+    }
+}

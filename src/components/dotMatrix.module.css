@@ -1,0 +1,23 @@
+.matrix {
+    overflow: visible;
+    fill: currentColor;
+}
+
+/* off: --dot-off (a colour, or a gradient); on: --dot-on. The on dots sit
+   over the off ones and each switches at its own delay, instantly: one LED
+   at a time. */
+.off circle {
+    fill: var(--dot-off, var(--lilac));
+}
+
+.on circle {
+    fill: var(--dot-on, var(--led));
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0s;
+    transition-timing-function: step-start;
+}
+
+.lit .on circle {
+    opacity: 1;
+}

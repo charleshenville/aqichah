@@ -1,0 +1,214 @@
+/* Page chrome: the top bar, the head over the quad field, the violet sheet. */
+
+.page {
+    position: relative;
+}
+
+/* ---- Top bar ---- */
+
+.bar {
+    --bar-h: calc(var(--gutter) * 2 + 1.5rem);
+    display: flex;
+    align-items: flex-start;
+    gap: 1.4rem;
+    height: var(--bar-h);
+    padding: var(--gutter) var(--gutter) 0;
+    color: var(--lilac);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* pinned, with a shade behind it that keeps the words readable over anything */
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.fixed::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: calc(var(--bar-h) * 2.4);
+    background: linear-gradient(rgba(17, 15, 22, 0.62), rgba(17, 15, 22, 0.3) 45%, rgba(17, 15, 22, 0)); /* the pages' dark purple */
+    pointer-events: none;
+    z-index: -1;
+}
+
+.fixed a {
+    pointer-events: auto;
+}
+
+/* the resting aq: dark over the photo head, and over the dark sheet (and
+   the tools' dark bar) the colour of the page's text, so it always reads */
+.fixed:not(.night) .home {
+    --dot-off-top: #221d2b;
+    --dot-off-bottom: var(--lilac);
+}
+
+.night .home {
+    --dot-off: var(--lilac);
+}
+
+/* over the tools: a solid strip of the stage's own colour, no shade, so
+   the words always read (the tools start below it) */
+.night {
+    background: var(--night);
+}
+
+.night::before {
+    display: none;
+}
+
+/* the mark: its five-row body sits on the words' line, the q's tail hangs below */
+.home {
+    display: block;
+    flex: 0 0 auto;
+    width: 2.6rem;
+    margin-top: 0.02rem;
+    --dot-off: var(--deep); /* the manifold ink */
+    --dot-on: var(--led);
+}
+
+.home svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.doors {
+    display: flex;
+    gap: 1.1rem;
+    margin-left: auto;
+}
+
+/* as on the landing page: bold and tight; lighter on hover, a touch darker pressed */
+.door {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--lilac-2);
+    -webkit-text-stroke: 0 currentColor;
+    transition: color 0.2s ease, -webkit-text-stroke-width 0.3s var(--ease);
+}
+
+/* bolder and white on hover, as the landing's words grow bolder */
+.door:hover,
+.door:focus-visible {
+    color: #ffffff;
+    -webkit-text-stroke-width: 0.03em;
+}
+
+.door:active {
+    color: #d8d8db;
+}
+
+.here,
+.here:hover {
+    color: var(--led);
+}
+
+.crumb {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+    min-width: 0;
+    padding-top: 0.08rem;
+    white-space: nowrap;
+    font-size: 1rem;
+    color: var(--lilac-2);
+}
+
+.crumb h1 {
+    font-size: inherit;
+    font-weight: 500;
+    color: var(--led);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.crumb a {
+    pointer-events: auto;
+}
+
+.crumb a:hover {
+    color: var(--lilac);
+}
+
+@media (max-width: 640px) {
+    .night .doors {
+        display: none;
+    }
+}
+
+/* ---- Head ---- */
+
+/* The background is fixed to the window (the sheet scrolls up over it);
+   the clip keeps it to the head, so it never shows anywhere else. The
+   title sits outside the clip, above the sheet. */
+.head {
+    position: relative;
+    z-index: 2;
+    height: 62svh;
+}
+
+.hero {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    clip-path: inset(0);
+}
+
+.title {
+    position: absolute;
+    z-index: 21;
+    left: var(--gutter);
+    /* the baseline on the sheet's edge (bottom is set from the font's
+       descent), descenders hanging onto the sheet */
+    margin: 0;
+    /* about 0.65em a character: fit the word across the page, up to a cap */
+    font-size: max(2.5rem, min(17.5rem, calc((100vw - 2 * var(--gutter)) / (var(--chars, 8) * 0.65))));
+    line-height: 0;
+    color: var(--led);
+}
+
+/* ---- Sheet ---- */
+
+.sheet {
+    position: relative;
+    z-index: 1;
+    background: var(--night); /* the tools' own dark purple */
+    padding: var(--space-3) var(--gutter);
+    min-height: 40svh;
+}
+
+/* ---- Rule ---- */
+
+/* a line, then the title with the same space above it as below it */
+.rule {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    padding-top: var(--space-2);
+    margin: 0 0 var(--space-2);
+    border-top: 1px solid var(--rule-strong);
+}
+
+.ruleTitle {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--lilac);
+}
+
+.ruleMeta {
+    line-height: 1;
+}
+
+.ruleMeta {
+    margin-left: auto;
+}

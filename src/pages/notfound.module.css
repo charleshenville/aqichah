@@ -1,0 +1,23 @@
+.page {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+}
+
+.body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--gutter);
+    gap: 18px;
+    font-size: clamp(18px, 2vw, 26px);
+}
+
+.code {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(120px, 34vw, 520px);
+    line-height: 0.8;
+    color: var(--led);
+}

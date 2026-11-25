@@ -1,0 +1,248 @@
+/* ---- aq design system ----------------------------------------------------------
+   Violet paper, lilac type, white LEDs. Helvetica Neue for everything that is
+   read; Bus Stop (dot matrix) only for big titles and stylistic marks. Square
+   corners, hairlines, lowercase. A sheet of paper is screened over it all.
+
+   Colours and the paper live here; behaviour (timings, the manifold, the quad
+   field, links) lives in src/config/. */
+
+@font-face {
+    font-family: 'Bus Stop';
+    src: url('../assets/fonts/bus-stop.woff2') format('woff2');
+    font-display: swap;
+}
+
+:root {
+    /* from the mockup */
+    --violet: #584f6e;
+    --violet-deep: #463f5a;
+    --lilac: #cdc8ec;
+    --lilac-2: #a09cbb;
+    --lilac-3: #aba6c2;
+    --soot: #0c0b0f;
+    --deep: #2e2839; /* the page colour, much darker: manifold ink, tool accents */
+    --led: #ffffff;
+    --night: #110f16; /* tool stages */
+    --rule: rgba(205, 200, 236, 0.26);
+    --rule-strong: rgba(205, 200, 236, 0.62);
+    --hover: rgba(205, 200, 236, 0.1);
+
+    /* links, the way they used to be */
+    --link-hover-line: 1px;
+    --link-active: #ffffff;
+
+    --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --display: 'Bus Stop', ui-monospace, Menlo, monospace;
+
+    /* the paper scan laid over everything: a background sheet over photos,
+       a foreground sheet over the violet, and a whisper over the tools */
+    --paper-bg: 0.28;
+    --paper-fg: 0.24;
+
+    /* the big words (and the nav) */
+    --word: #0c0b0f;
+    --word-hover: #e6e5ea; /* on hover: a hair darker than the aq */
+    --word-press: #c9c9cc; /* a little darker pressed, still far lighter than at rest */
+
+    --gutter: clamp(16px, 2.2vw, 36px);
+    /* the one spacing scale: inside a block, between blocks, between sections */
+    --space-1: 0.75rem;
+    --space-2: 1.5rem;
+    --space-3: clamp(3rem, 6vw, 5.5rem);
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    /* the names the tools were written against, mapped onto this palette */
+    --ink: var(--lilac);
+    --ink-2: var(--lilac-2);
+    --ink-3: var(--lilac-3);
+    --paper: var(--violet);
+    --paper-raised: #4c4561;
+    --accent: var(--deep); /* the dark purple: what is on, in the tools */
+    --on-accent: #ffffff;
+    --mono: 'DM Mono', ui-monospace, Menlo, monospace;
+    /* the tools' menus: the violet laid over the paper scan, the same mix as
+       the paper over the pages (the only paper in the tools) */
+    --menu-bg: linear-gradient(rgba(88, 79, 110, 0.78), rgba(88, 79, 110, 0.78)), url('../assets/images/paper-fg.webp') center top / 100vw auto repeat;
+    --grotesk: var(--sans);
+    /* the tools keep clear of the top bar */
+    --nav-h: calc(var(--gutter) * 2 + 1.5rem);
+
+    color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    background: var(--violet);
+    overscroll-behavior-y: none;
+}
+
+body {
+    margin: 0;
+    min-height: 100svh;
+    background: var(--violet);
+    color: var(--lilac);
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    text-transform: lowercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, p, ol, ul, figure {
+    margin: 0;
+}
+
+ol, ul {
+    padding: 0;
+    list-style: none;
+}
+
+img, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+::selection {
+    background: var(--led);
+    color: var(--violet);
+}
+
+:focus-visible {
+    outline: 1px dashed var(--led);
+    outline-offset: 3px;
+}
+
+/* ---- Links: underline on hover, white while pressed ---- */
+
+.link {
+    text-decoration: none;
+    text-underline-offset: 0.14em;
+    text-decoration-thickness: var(--link-hover-line);
+}
+
+.link:hover,
+.link:focus-visible {
+    text-decoration-line: underline;
+}
+
+.link:active {
+    color: var(--link-active);
+}
+
+/* ---- Small marks ---- */
+
+/* A number in a hairline box, like the tracker's labels in the video. */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.1em;
+    height: 1.7em;
+    padding: 0 0.35em;
+    border: 1px solid currentColor;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 0.6875rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+.meta {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: var(--lilac-2);
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ---- Paper ----
+   Sits inside its container (position: absolute) and scrolls with it. */
+
+.paper {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.paper-bg {
+    background-position: center;
+    background-size: cover;
+    opacity: var(--paper-bg);
+}
+
+/* the foreground tile is mirrored top to bottom, so it repeats without a seam */
+/* the background's sheet stays put with the background (fixed, clipped to
+   its head); the foreground's sheet travels with the page over it */
+.paper.fixed {
+    position: fixed;
+}
+
+.paper-fg {
+    background-position: center top;
+    background-size: 100vw auto; /* screen-relative: zoom leaves it alone */
+    background-repeat: repeat;
+    opacity: var(--paper-fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* ---- The quad field: photo canvas under the quads canvas ---- */
+
+.quad-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.quad-field.fixed {
+    position: fixed;
+}
+
+.quad-field canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+}

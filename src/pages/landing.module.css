@@ -1,0 +1,272 @@
+/* The landing page, laid out in the mockup's units: the mockup is 5747 wide,
+   so one unit (--u) is 100vw / 5747 and positions are numbers read off it.
+   The picture (photo, manifold, marks) is in those units and stays put under
+   browser zoom; the words are in rem, so zoom resizes them. */
+
+.landing {
+    --u: calc(100vw / 5747);
+    /* the panel: one padding all round its contents */
+    --pad: calc(205 * var(--u));
+    --mark-w: calc(1200 * var(--u)); /* the aq is 0.7 as tall as it is wide */
+    --panel-h: calc(var(--mark-w) * 0.7 + 2 * var(--pad));
+    --tile-w: calc(4841 * var(--u));
+    --tile-h: calc(2260 * var(--u));
+    --tile-top: calc(-300 * var(--u));
+    /* the gap between the words' ink and the page edges, the same on both sides */
+    --edge: calc(74 * var(--u));
+    position: relative;
+    height: 100svh;
+    min-height: calc(3000 * var(--u));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--violet);
+}
+
+/* ---- Photo (with its quads), manifold ---- */
+
+.photo {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.manifold {
+    position: absolute;
+    z-index: 1;
+    left: var(--l);
+    top: var(--t);
+    width: var(--w);
+    height: var(--h);
+    pointer-events: none;
+}
+
+/* ---- Panel ----
+   A row: the aq at the left, the links at the right, both standing on the
+   same bottom padding. It grows when the text does (browser zoom), and the
+   photo above gives way. The aq is set a touch low: the q's tail is light,
+   so the eye reads the mark as centred when its box sits below centre. */
+
+.panel {
+    position: relative;
+    z-index: 30;
+    flex: 0 0 auto;
+    min-height: var(--panel-h);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--pad);
+    padding: calc(var(--pad) * 1.25) var(--pad) calc(var(--pad) * 0.75);
+    background: var(--violet);
+}
+
+.marqueeClip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--tile-top);
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.marquee {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% + var(--tile-w));
+    height: var(--tile-h);
+    background-repeat: repeat-x;
+    background-size: var(--tile-w) var(--tile-h);
+    will-change: transform;
+    animation: scroll linear infinite;
+}
+
+.marqueeReverse {
+    animation-direction: reverse;
+}
+
+@keyframes scroll {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(calc(-1 * var(--tile-w)), 0, 0); }
+}
+
+/* ---- software / discography ---- */
+
+.doors {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 0;
+    z-index: 25;
+}
+
+.door {
+    position: absolute;
+    /* the baseline on the panel's top edge */
+    bottom: -0.13em;
+    font-size: min(8.1rem, 9.02vw);
+    font-weight: 700;
+    letter-spacing: -0.09em;
+    line-height: 1;
+    color: var(--word);
+    white-space: nowrap;
+    -webkit-text-stroke: 0 currentColor;
+    transition:
+        transform 0.42s var(--ease),
+        color 0.25s ease,
+        -webkit-text-stroke-width 0.42s var(--ease);
+}
+
+/* Helvetica Neue Bold: 's' inks 0.029em in from its box; the trailing
+   letter-spacing leaves 'y' inking 0.096em past its box. */
+.software {
+    left: calc(var(--edge) - 0.029em);
+    transform-origin: 0% 88%;
+}
+
+.discography {
+    right: calc(var(--edge) + 0.096em);
+    transform-origin: 100% 88%;
+}
+
+/* grow away from the corner they hang from, bolder and lighter */
+.door:hover,
+.door:focus-visible {
+    color: var(--word-hover);
+    -webkit-text-stroke-width: 0.026em;
+    transform: scale(1.045);
+    outline: none;
+}
+
+.door:active {
+    color: var(--word-press);
+}
+
+/* ---- the LED mark ---- */
+
+.mark {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    width: var(--mark-w);
+    margin: 0;
+    color: var(--led);
+    line-height: 0;
+}
+
+.mark svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+/* ---- links: right-aligned, standing on the same line as the aq ---- */
+
+.socials {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.7em;
+    min-width: 0;
+    font-size: 1.45rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+}
+
+.socials li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.3em 1.15em;
+}
+
+.social {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42em;
+}
+
+.icon {
+    flex: 0 0 auto;
+    width: 0.95em;
+    height: 0.95em;
+}
+
+.social {
+    color: var(--soot);
+}
+
+/* ---- Portrait and narrow (or zoomed far in) --------------------------------
+   Photo on top, the two words stacked on the seam, the mark, then the links. */
+
+@media (max-aspect-ratio: 1/1), (max-width: 760px) {
+    .landing {
+        --u: calc(100vw / 2400);
+        --tile-h: 108vw;
+        --tile-w: calc(var(--tile-h) * 2.142);
+        --tile-top: -9vw;
+        --edge: 4.5vw;
+        min-height: 640px;
+    }
+
+    /* the page may scroll here: the photo always has room for the two
+       stacked words, however large the text gets */
+    .landing {
+        height: auto;
+        min-height: 100svh;
+    }
+
+    .photo {
+        flex: 0 0 auto;
+        height: max(50svh, calc(min(18.4vw, 6rem) * 2.4));
+    }
+
+    .manifold {
+        left: var(--pl);
+        top: var(--pt);
+        width: var(--pw);
+        height: var(--ph);
+    }
+
+    .panel {
+        min-height: 0;
+        flex: 1 0 auto;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 9vw;
+        padding: 11vw var(--edge) 10vw;
+    }
+
+    .door {
+        font-size: min(18.4vw, 6rem);
+    }
+
+    .software {
+        bottom: 0.82em;
+    }
+
+    .mark {
+        width: 46vw;
+    }
+
+    .socials {
+        align-items: flex-start;
+        font-size: 1.2rem;
+    }
+
+    .socials li {
+        justify-content: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee {
+        animation: none;
+    }
+}
