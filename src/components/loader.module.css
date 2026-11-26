@@ -1,0 +1,75 @@
+/* The loading page: "loading..." and the count standing on the bottom
+   gutter, like the 404, in Bus Stop on the violet under the paper. */
+
+.loader {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--gutter);
+    padding: var(--gutter);
+    background: var(--violet);
+    color: var(--led);
+    font-family: var(--display);
+    font-weight: 400;
+    /* "loading..." and "100%" are ~8em together: this fits a phone */
+    font-size: clamp(32px, 9vw, 160px);
+    line-height: 1; /* room for the g's tail */
+    white-space: nowrap;
+    transition: opacity 380ms var(--ease);
+}
+
+.leaving {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* hidden until Bus Stop has arrived, so the fallback font never flashes */
+.word,
+.count {
+    visibility: hidden;
+}
+
+.ready .word,
+.ready .count {
+    visibility: visible;
+}
+
+/* The ellipsis: none, one, two, three, again. Each dot is off for the start
+   of the cycle and on for the rest; at rest (reduced motion) all three show. */
+.dots span {
+    animation: dot1 1.6s steps(1, end) infinite;
+}
+
+.dots span:nth-child(2) {
+    animation-name: dot2;
+}
+
+.dots span:nth-child(3) {
+    animation-name: dot3;
+}
+
+@keyframes dot1 {
+    0% { opacity: 0; }
+    25% { opacity: 1; }
+}
+
+@keyframes dot2 {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+@keyframes dot3 {
+    0% { opacity: 0; }
+    75% { opacity: 1; }
+}
+
+/* Bus Stop's digits are not all one width ("1" is narrow), so the number
+   sits right-aligned in room for "100" and the % never moves. */
+.num {
+    display: inline-block;
+    min-width: 2em;
+    text-align: right;
+}

@@ -22,6 +22,7 @@ React 18 + Vite, plain CSS modules, three.js for the manifold and the 3D tools.
 | tool list, blurbs and previews | `src/data/tools.js` |
 | releases and tracks | `src/data/discography.js` |
 | colours, type, link colours, paper strength | `src/styles/global.css` (`:root`) |
+| the loading page: what it waits for, its timing | `bootTasks` in `src/App.jsx`, `src/components/Loader.jsx` |
 
 Turning on a Compositor download: give its entry in `COMPOSITOR_DOWNLOADS` a
 `url` and the disabled "soon" button becomes a download link.
@@ -41,7 +42,8 @@ src/
   App.jsx, main.jsx       routes; the paper overlay
   pages/                  Landing, Software, Discography, Tool (one route per tool), NotFound
   components/             LedMark (the "aq" of individual LEDs), ManifoldView, QuadField,
-                          Paper, Icon, Oscilloscope, PageShell, Clip, Boundary
+                          Paper, Icon, Oscilloscope, PageShell, Clip, Boundary,
+                          Loader (the first load: "loading..." and a percentage)
   config/                 everything meant to be tweaked (above)
   data/                   tools and releases
   lib/                    aq glyph grid, encoders, noise, pixel sort workers ...
