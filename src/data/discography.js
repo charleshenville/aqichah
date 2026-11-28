@@ -18,7 +18,6 @@ export const RELEASES = [
         art: demosArt,
         tracks: [
             { title: 'maestro', audio: audio('maestro') },
-            { title: 'sleepy cat', audio: audio('sleepycat') },
             { title: 'euro', audio: audio('euro') },
             { title: 'happy clanker army', audio: audio('happyclankerarmy') },
             { title: 'chemong', audio: audio('chemong') },
